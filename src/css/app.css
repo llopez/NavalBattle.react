@@ -1,0 +1,16 @@
+.board {
+}
+
+.board .row {
+  display: flex;
+}
+
+.board .row .cell {
+  width: 90px;
+  height: 90px;
+  border: 1px solid;
+}
+
+.board .row .cell.filled {
+  background-color: #ccc;
+}
