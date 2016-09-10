@@ -1,21 +1,19 @@
 import React from 'react';
+import * as Actions from './../Actions';
 
 export default class Cell extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {active: false};
     this._handleClick = this._handleClick.bind(this);
   }
 
   _handleClick() {
-    this.setState({
-      active: !this.state.active
-    });
+    Actions.toggleCell(this.props.name);
   }
 
   render() {
     let classes = "cell";
-    if(this.state.active){
+    if(this.props.value){
       classes += " filled";
     }
 
