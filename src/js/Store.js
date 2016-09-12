@@ -1,5 +1,15 @@
 import AppDispatcher from './AppDispatcher';
 import EventEmitter from 'events';
+import firebase from 'firebase/database';
+
+var config = {
+  apiKey: "AIzaSyAmPPO1kGB_iGsGaUXjUQy5DT_h_o3ErRE",
+  authDomain: "navalbattle-b9f62.firebaseapp.com",
+  databaseURL: "https://navalbattle-b9f62.firebaseio.com",
+  storageBucket: "",
+};
+ 
+var app = firebase.initializeApp(config);
 
 let _board = {
   11: false,

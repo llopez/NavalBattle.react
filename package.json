@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "events": "^1.1.1",
+    "firebase": "^3.3.2",
     "flux": "^2.1.1",
     "react": "^15.3.0",
     "react-dom": "^15.3.0"
