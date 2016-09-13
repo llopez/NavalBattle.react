@@ -1,6 +1,6 @@
 import AppDispatcher from './AppDispatcher';
 import EventEmitter from 'events';
-import firebase from 'firebase/database';
+import firebase from 'firebase';
 
 var config = {
   apiKey: "AIzaSyAmPPO1kGB_iGsGaUXjUQy5DT_h_o3ErRE",
@@ -8,8 +8,16 @@ var config = {
   databaseURL: "https://navalbattle-b9f62.firebaseio.com",
   storageBucket: "",
 };
- 
-var app = firebase.initializeApp(config);
+
+let _firebase_app = firebase.initializeApp(config);
+
+let _auth = _firebase_app.auth();
+
+_auth.signInWithEmailAndPassword('luigibyte@gmail.com', 'password').catch(function(error) {
+  console.log(error);
+});
+
+let _db = _firebase_app.database();
 
 let _board = {
   11: false,
@@ -30,14 +38,24 @@ const Store = Object.assign({}, EventEmitter.prototype, {
   },
 
   toggle: function(cell) {
-    _board[cell] = !_board[cell];
-    this.emit('change');
-  }
+    let d = {};
+    d[cell] = !_board[cell];
 
+    _db.ref("board").update(d).then(function() {
+      _board[cell] = d[cell];
+    }).catch(function(err) {
+      console.log(err);
+    });
+    this.emit('change');
+  },
+
+  sync: function(data) {
+    _board = data;
+     this.emit('change');
+  }
 });
 
 AppDispatcher.register(function(payload) {
-
   switch(payload.actionType) {
     case "TOGGLE_CELL":
       Store.toggle(payload.cell);
@@ -46,10 +64,10 @@ AppDispatcher.register(function(payload) {
     default:
       return true;
   }
-
-
 });
 
-window.Store = Store;
+_db.ref('board').on('value', function(snapshot) {
+  Store.sync(snapshot.val());
+});
 
 export default Store;
